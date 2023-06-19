@@ -68,3 +68,13 @@ a {
 .DYXVr {
   min-width: 100% !important;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 50%;
+  width: 40px;
+}

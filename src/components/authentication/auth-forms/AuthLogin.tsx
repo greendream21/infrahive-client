@@ -83,7 +83,7 @@ const FirebaseLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
               }}
             >
               <Box sx={{ mr: { xs: 1, sm: 2 }, width: 20, height: 20, marginRight: matchDownSM ? 8 : 16 }}>
-                <Image src={Google} alt="Berry Dashboard" layout="intrinsic" width={'16px'} height={'16px'} />
+                <Image src={Google} alt="Berry Dashboard" layout="intrinsic" width={'16'} height={'16'} />
               </Box>
               Sign in with Google
             </Button>

@@ -16,6 +16,10 @@ const loadAlldocuments = async (email: String) => {
   const data = await Axios.post('api/app/loadDcouments', { email });
   return data;
 };
+const loadOnedocument = async (filename: String) => {
+  const data = await Axios.post('api/app/loadOneDcoument', { filename });
+  return data;
+};
 const getChatText = async (message: String, prompt: String, email: String) => {
   const data = await Axios.post('api/app/getChatText', { message, prompt, email });
   return data;
@@ -24,5 +28,9 @@ const apideleteFile = async (email: String, filename: String) => {
   const data = await Axios.post('api/app/deleteFile', { email, filename });
   return data;
 };
+const publishChatbot = async (email: String, filename: String, publishURL: String, publishType: String) => {
+  const data = await Axios.post('api/app/publishChatbot', { email, filename, publishURL, publishType });
+  return data;
+}
 
-export { documentSubmit, loadAlldocuments, getChatText, apideleteFile };
+export { documentSubmit, loadAlldocuments, loadOnedocument, getChatText, apideleteFile, publishChatbot };

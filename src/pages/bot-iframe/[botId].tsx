@@ -26,7 +26,6 @@ const ChatGPT = () => {
   const [prompt, setPrompt] = useState<String>('');
   const [totalMessage, setTotalMessage] = useState<any>([]);
   const [message, setMessage] = useState<String>('');
-  const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const email = user.email;
 
@@ -39,7 +38,6 @@ const ChatGPT = () => {
   };
 
   const sendMessage = async () => {
-    setLoading(true);
     if (message === '') return;
     setMessage('');
     setTotalMessage((prev: []) => {
@@ -50,14 +48,9 @@ const ChatGPT = () => {
     setTotalMessage((prev: []) => {
       return [...prev, { type: 'ai', message: data.text }];
     });
-    setLoading(false);
     moveScroll('');
   };
-
-  const back =async () => {
-    router.push('/app/docu_analysis');
-  }
-
+  
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover
@@ -69,21 +62,13 @@ const ChatGPT = () => {
   }));
   useEffect(() => {
     if (router.isReady) {
-      setPrompt(String(router.query['filename']));
+      setPrompt(String(router.query['botId']));
     }
   }, []);
   return (
     <Grid container spacing={gridSpacing}>
-      {loading ? (
-            <div className="spinner">
-              <img src='/assets/animation/Book.gif' />
-            </div>
-          ) : null}
-      <Grid item xs={12} lg={12} md={12}>      
-      <Button sx={{m: '3px'}} onClick={() => back()} startIcon={<ReplyIcon />} color='secondary'>
-        Back
-      </Button>
-        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '85vh', position: 'relative' }}>          
+      <Grid item xs={12} lg={12} md={12}>
+        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '85vh', position: 'relative' }}>
           <TableContainer component={Paper} id="chat-box" sx={{ height: '75vh' }}>
             <Table aria-label="customized table">
               <TableBody sx={{ width: '100%', height: '75vh', overflow: 'auto', display: 'contents' }}>
@@ -153,5 +138,5 @@ const ChatGPT = () => {
     </Grid>
   );
 };
-ChatGPT.Layout = 'authGuard';
+
 export default ChatGPT;
