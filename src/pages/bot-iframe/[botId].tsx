@@ -26,6 +26,7 @@ const ChatGPT = () => {
   const [prompt, setPrompt] = useState<String>('');
   const [totalMessage, setTotalMessage] = useState<any>([]);
   const [message, setMessage] = useState<String>('');
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const email = user.email;
 
@@ -38,6 +39,7 @@ const ChatGPT = () => {
   };
 
   const sendMessage = async () => {
+    setLoading(true);
     if (message === '') return;
     setMessage('');
     setTotalMessage((prev: []) => {
@@ -48,6 +50,7 @@ const ChatGPT = () => {
     setTotalMessage((prev: []) => {
       return [...prev, { type: 'ai', message: data.text }];
     });
+    setLoading(false);
     moveScroll('');
   };
   
@@ -67,11 +70,16 @@ const ChatGPT = () => {
   }, []);
   return (
     <Grid container spacing={gridSpacing}>
+    {loading ? (
+          <div className="spinner">
+            <img src='/assets/animation/Book.gif' />
+          </div>
+        ) : null}
       <Grid item xs={12} lg={12} md={12}>
-        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '85vh', position: 'relative' }}>
-          <TableContainer component={Paper} id="chat-box" sx={{ height: '75vh' }}>
+        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '100vh', position: 'relative' }}>
+          <TableContainer component={Paper} id="chat-box" sx={{ height: '90vh' }}>
             <Table aria-label="customized table">
-              <TableBody sx={{ width: '100%', height: '75vh', overflow: 'auto', display: 'contents' }}>
+              <TableBody sx={{ width: '100%', height: '90vh', overflow: 'auto', display: 'contents' }}>
                 {totalMessage.map((item: any, i: any) => {
                   if (item.type === 'me') {
                     return (

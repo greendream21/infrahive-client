@@ -51,7 +51,8 @@ const application = {
       id: 'customer_support',
       title: <FormattedMessage id="customer_support" />,
       type: 'item',
-      icon: icons.SupportAgent
+      icon: icons.SupportAgent,
+      url: '/app/cust_support'
     },
     {
       id: 'data_analysis',

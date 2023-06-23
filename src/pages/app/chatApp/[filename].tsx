@@ -5,7 +5,9 @@ import { Avatar, Grid, Paper, Stack, Table, TableBody, TableContainer, TableRow,
 
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 // project imports
 import { gridSpacing } from 'store/constant';
@@ -13,30 +15,18 @@ import { gridSpacing } from 'store/constant';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 // action imports
-import { getChatText } from 'actions/application';
+import { getChatText } from 'actions/chatapplication';
 import { moveScroll } from 'utils/scroll';
 import { useSelector } from 'store';
-
-import { loadOnedocument } from 'actions/application';
-
 // ==============================|| ChatGPT part ||============================== //
 
-const ChatGPT = () => {
-  interface Row {
-    publishType: string;
-    email: string;
-    // other properties here
-  }
-
+const ChatApp = () => {
   const theme = useTheme();
   const router = useRouter();
   const [prompt, setPrompt] = useState<String>('');
   const [totalMessage, setTotalMessage] = useState<any>([]);
   const [message, setMessage] = useState<String>('');
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState<Row[] | null>(null);
-  const [publishType, setPublishType] = useState('');
-  const [botEmail, setBotEmail] = useState('');
   const user = useSelector((state) => state.auth.user);
   const email = user.email;
 
@@ -44,7 +34,7 @@ const ChatGPT = () => {
     if (e.keyCode === 13) {
       if (message != '') {
         sendMessage();
-      } 
+      }
     }
   };
 
@@ -63,7 +53,11 @@ const ChatGPT = () => {
     setLoading(false);
     moveScroll('');
   };
-  
+
+  const back =async () => {
+    router.push('/app/cust_support');
+  }
+
   const StyledTableRow = styled(TableRow)(() => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover
@@ -75,57 +69,24 @@ const ChatGPT = () => {
   }));
   useEffect(() => {
     if (router.isReady) {
-      setPrompt(String(router.query['botId']));
+      setPrompt(String(router.query['filename']));
     }
   }, []);
-  
-  const init = async () => {
-    const result = await loadOnedocument(String(router.query['botId']));
-    const rows = result.data.map((item: any) => ({
-      // map each item in the response to a Row object
-      publishType: item.publishType,
-      email: item.email,
-      // other properties here
-    }));
-    setRows(rows);
-  }
-  
-  useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
-    if (rows && rows.length > 0) {
-      setPublishType(rows[0].publishType);
-      setBotEmail(rows[0].email);
-    }
-  }, [rows]);
-
-  useEffect(() => {
-    if (publishType === 'unpublish') {
-      router.push('/app/undefined');
-    } else {
-      if (publishType === 'private') {
-        if (email !== botEmail) {
-          router.push('/app/undefined');
-        }
-      }
-    }
-      
-  }, [publishType]);
-  
-  return (    
+  return (
     <Grid container spacing={gridSpacing}>
       {loading ? (
             <div className="spinner">
               <img src='/assets/animation/Book.gif' />
             </div>
           ) : null}
-      <Grid item xs={12} lg={12} md={12}>
-        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '100vh', position: 'relative' }}>
-          <TableContainer component={Paper} id="chat-box" sx={{ height: '90vh' }}>
+      <Grid item xs={12} lg={12} md={12}>      
+      <Button sx={{m: '3px'}} onClick={() => back()} startIcon={<ReplyIcon />} color='secondary'>
+        Back
+      </Button>
+        <Paper sx={{ width: '100%', p: theme.breakpoints.down('sm') ? 0 : 5, height: '75vh', position: 'relative' }}>          
+          <TableContainer component={Paper} id="chat-box" sx={{ height: '65vh' }}>
             <Table aria-label="customized table">
-              <TableBody sx={{ width: '100%', height: '98vh', overflow: 'auto', display: 'contents' }}>
+              <TableBody sx={{ width: '100%', height: '65vh', overflow: 'auto', display: 'contents' }}>
                 {totalMessage.map((item: any, i: any) => {
                   if (item.type === 'me') {
                     return (
@@ -192,5 +153,5 @@ const ChatGPT = () => {
     </Grid>
   );
 };
-
-export default ChatGPT;
+ChatApp.Layout = 'authGuard';
+export default ChatApp;
