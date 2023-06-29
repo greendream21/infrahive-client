@@ -46,12 +46,12 @@ const newApp = () => {
 
     const back =async () => {
         router.push('/app/cust_support');
-    }
+    };
 
     const backApp =async () => {
         router.push('/app/newapp');
         setCreateType('unselect');
-    }
+    };
 
     const fileHandleChange = (file: any) => {
         setFile(file);
