@@ -107,7 +107,7 @@ const bull = (
                                                 </Typography>
                                                 <Button color='primary' variant='outlined' startIcon={<AddIcon />} sx={{width: '200px'}} onClick={() => goEditPrompt(true)}>Create PROMPT</Button>
                                                 <hr />
-                                                <List />
+                                                <List mode='dream' />
                                             </Stack>
                                         ) 
                                         :
@@ -118,7 +118,7 @@ const bull = (
                                                 </Typography>
                                                 <Button color='primary' variant='outlined' startIcon={<ReplyAllIcon />} sx={{width: '200px'}} onClick={() => goEditPrompt(false)}>Back</Button>
                                                 <hr />
-                                                <Prompts mode='dream'/>
+                                                <Prompts mode='dream' setPromptFlag={setPromptFlag}/>
                                             </Stack> 
                                         )
                                     }

@@ -1,6 +1,6 @@
 import { FormControl, Grid, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, } from "@mui/material"
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import SaveIcon from '@mui/icons-material/Save';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 
 import Subject from "./subject";
 import Specific_Aspects from "./specific_aspects";
@@ -10,8 +10,12 @@ import LandscapeAccurate from "./landscapeAccurate";
 import Artists from "./artists";
 import Camera from "./camera";
 
+import CodeSnippet from "./codeSnippet";
+
 import React, { useEffect, useState } from "react";
 import snackbar from 'utils/snackbar';
+
+import { promptSubmit } from "actions/image";
 
 const Prompts = (props: any) => {
 
@@ -75,7 +79,7 @@ const Prompts = (props: any) => {
         snackbar("Prompt copied!");
     };
 
-    const Save = () => {
+    const Save = async () => {
         if (promptsName === '') {
             setPromptsNameError(true);
         } else {
@@ -100,16 +104,45 @@ const Prompts = (props: any) => {
             setImageSizeError(false);
         }
 
-        if (!promptsValueError && !promptsNameError && !imageStyleError && !imageSizeError) {
-            const data = {
-                promptsName,
-                promptsValue,
-                imageStyle,
-                imageSize,
+        if (promptsName !== '' && promptsValue !== '' && imageStyle !== '' && imageSize !== '') {
+            const value: number = Number(imageSize);
+            let data = {};
+            if (mode === 'dalle') {
+                data = {
+                    promptsName: promptsName,
+                    promptsValue: promptsValue,
+                    imageStyle: imageStyle,
+                    size: dalleSizes[value][1],
+                    mode: mode,
+                }
             }
-            console.log(data);
+
+            if (mode === 'dream') {
+                data = {
+                    promptsName: promptsName,
+                    promptsValue: promptsValue,
+                    imageStyle: imageStyle,
+                    size: sizes[value][1],
+                    mode: mode,
+                }
+            }
+
+            const result = await promptSubmit(data);
+            if (result.status == 200) {
+                snackbar("File Uploaded successfully.");
+                props.setPromptFlag(false);
+            }
         }       
     };
+
+    const handlePromptChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPromptsName(event.target.value);
+    }
+
+   const handlePromptsValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPrompt(event.target.value);
+   }
+   
 
     const handleImageStyleChange = (event: SelectChangeEvent) => {
         setImageStyle(event.target.value);
@@ -143,32 +176,41 @@ const Prompts = (props: any) => {
     };
 
     const getPromptsValue = async (prompts: any) => {
-        const values = Object.values(prompts);
-        const text = Array.isArray(values) ? values.join(" ") : values;
-        setPromptsValue(text.trim());
+        let textPrompt;
+
+        if (typeof prompts === 'object') {            
+            const values = Object.values(prompts);
+            const text = Array.isArray(values) ? values.join(" ") : values;
+            textPrompt = text.trim();
+        } else {
+            textPrompt = prompts;
+        }
+        setPromptsValue(textPrompt);
     };
 
     useEffect(() => {
+        setImageStyle(imageStyle);
+        setImageSize(imageSize);
         getPromptsValue(prompt);
     }, [prompt]);
 
+    console.log(imageSize, imageStyle, prompt);
+    
+
     return (
         <Stack justifyContent={"center"} spacing={3} py={3} sx={{ width: '100%' }}>
+            <CodeSnippet promptsValue={promptsValue} imageStyle={imageStyle} imageSize={imageSize} mode={mode}  />
             <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <TextField id="promptName" label="Prompt Name" variant="outlined" sx={{ width: '100%' }} color='primary' value={promptsName} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setPromptsName(event.target.value);
-                }} error={promptsNameError} helperText={promptsNameError ? "Data can't be empty" : ""}/>
+                <TextField id="promptName" label="Prompt Name" variant="outlined" sx={{ width: '100%' }} color='primary' value={promptsName} onChange={handlePromptChange} error={promptsNameError} helperText={promptsNameError ? "Data can't be empty" : ""}/>
                 <IconButton aria-label="copy" size="large" color='primary' onClick={Save}>
-                    <SaveIcon fontSize="inherit" />
+                    <SaveAsIcon fontSize="inherit" />
                 </IconButton>
             </Stack>
             <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <IconButton aria-label="copy" size="large" color='secondary' onClick={Copy}>
                     <ContentCopyIcon fontSize="inherit" />
                 </IconButton>
-                <TextField id="prompts" label="Prompts" variant="outlined" sx={{ width: '100%' }} color='secondary' value={promptsValue} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setPromptsValue(event.target.value);
-                }} error={promptsValueError} helperText={promptsValueError ? "Data can't be empty" : ""}/>
+                <TextField id="prompts" label="Prompts" variant="outlined" sx={{ width: '100%' }} color='secondary' value={promptsValue} onChange={handlePromptsValueChange} error={promptsValueError} helperText={promptsValueError ? "Data can't be empty" : ""}/>
             </Stack>
             <Grid container spacing={1} columns={12}>
                 <Grid item xs={6}>
@@ -180,6 +222,7 @@ const Prompts = (props: any) => {
                             label="Image Style" 
                             onChange={handleImageStyleChange}
                             error={imageStyleError}
+                            value={imageStyle}
                         >
                             {
                                 ImageStyles.map((content: string, index) => {

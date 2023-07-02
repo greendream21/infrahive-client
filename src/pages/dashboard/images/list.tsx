@@ -1,44 +1,57 @@
 import { Stack } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-const List = () => {
+import { loadPrompt } from "actions/image";
+import { toNumber } from "lodash";
+import { useEffect, useState } from "react";
+
+import { format } from 'date-fns';
+
+const List = (props: any) => {
     // Table
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'appName', headerName: 'App Name', width: 130 },
-        { field: 'appType', headerName: 'App Type', width: 130 },
+        { field: 'id', headerName: 'ID', width: 80 },
+        { field: 'promptName', headerName: 'Prompt Name', width: 150 },
+        { field: 'prompt', headerName: 'Prompt', width: 300 },
         {
-            field: 'published',
-            headerName: 'Published',
-            width: 90,
-        },
-        {
-            field: 'progressing',
-            headerName: 'Progressing',
-            width: 130,
-        },
-        {
-            field: 'wordCount',
-            headerName: 'Word count',
-            width: 130,
+            field: 'createDate',
+            headerName: 'Create Date',
+            width: 150,
         },
     ];
     
-    const rows = [
-    { id: 1, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 2, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 3, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 4, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 5, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'unchecked', progressing: 'Declined', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 6, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 7, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 8, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'unchecked', progressing: 'Declined', wordCount: 'Dec 2, 2022 - Fri' },
-    { id: 9, appName: 'Lorem Ipsum', appType: 'Cash Bot', published: 'checked', progressing: 'Approved', wordCount: 'Dec 2, 2022 - Fri' },
-    ];
+    const [rows, setRows] = useState<{ id: any, promptName: any; prompt: any; createDate: any; }[]>([]);
+
+    console.log(props.mode);
+
+    const loadData = async () => {
+        const data = await loadPrompt(props.mode);
+        const prompt = data.data;
+        for (let key in prompt) {
+            let item = prompt[key];
+            const originalDate  = new Date(item.createdAt);
+            const formattedDate  = format(originalDate, 'yyyy-MM-dd');
+            
+            const newRow = {
+                id: toNumber(key) + 1,
+                promptName: item.promptsName,
+                prompt: item.promptsValue,
+                createDate: formattedDate,
+            };
+
+            setRows(prevRows => [...prevRows, newRow]);
+        }        
+    }
+
+    console.log(rows);
+    
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         
-        <Stack sx={{ height: "75vh" }}>
+        <Stack sx={{ height: "75vh", }}>
             <DataGrid
                 rows={rows}
                 columns={columns}

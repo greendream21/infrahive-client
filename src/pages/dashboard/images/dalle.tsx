@@ -112,7 +112,7 @@ const bull = (
                                                 </Typography>
                                                 <Button color='primary' variant='outlined' startIcon={<AddIcon />} sx={{width: '200px'}} onClick={() => goEditPrompt(true)}>Create PROMPT</Button>
                                                 <hr />
-                                                <List />
+                                                <List mode='dalle' />
                                             </Stack>
                                         ) 
                                         :
@@ -123,7 +123,7 @@ const bull = (
                                                 </Typography>
                                                 <Button color='primary' variant='outlined' startIcon={<ReplyAllIcon />} sx={{width: '200px'}} onClick={() => goEditPrompt(false)}>Back</Button>
                                                 <hr />
-                                                <Prompts mode='dalle'/>
+                                                <Prompts mode='dalle' setPromptFlag={setPromptFlag}/>
                                             </Stack> 
                                         )
                                     }
