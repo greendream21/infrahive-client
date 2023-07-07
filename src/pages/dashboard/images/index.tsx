@@ -1,15 +1,6 @@
 import {
     Button,
     Grid,
-    ImageList,
-    ImageListItem,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField,
-    ThemeProvider,
-    createTheme,
     Paper,
     Stack,
     Typography,
@@ -18,30 +9,12 @@ import {
     CardActions,
     Chip
   } from '@mui/material';
-  import React, { ChangeEvent, FormEvent, ReactComponentElement, useEffect, useState } from 'react';
-  import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
-  import styled from '@emotion/styled';
-  import { toNumber } from 'lodash';
-  import { Download } from '@mui/icons-material';
+  import React from 'react';
   import { useRouter } from 'next/router';
-  
   
   import { gridSpacing } from 'store/constant';
   
-  // Download button styled compoennt so it can be displayed on top of the image
-  const DownloadBtn = styled('a')`
-    position: absolute;
-    top: 10px; /* Adjust the top position as needed */
-    right: 10px; /* Adjust the left position as needed */
-    background-color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #000000;
-    font-weight: bold;
-  `;
-  
-  const Stability = () => {
+  const Images = () => {
   
     const router = useRouter();
   
@@ -153,6 +126,6 @@ import {
           </Grid >
     );
   };
-  Stability.Layout = 'authGuard';
-  export default Stability;
+  Images.Layout = 'authGuard';
+  export default Images;
   
