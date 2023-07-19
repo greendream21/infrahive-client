@@ -73,6 +73,7 @@ const texts = () => {
     const [backDropOpen, setBackDropOpen] = useState<boolean>(false);
     const [textBox, setTextBox] = useState('');
     const [expanded, setExpanded] = React.useState<string | false>('panel1');
+    const [lastMessage, setLastMessage] = useState("");
 
     const [messages, setMessages] = useState('');
 
@@ -84,10 +85,10 @@ const texts = () => {
         1000,
     );
     const [top_pValue, setTop_pValue] = React.useState<number | string | Array<number | string>>(
-        router.query['botType'] === 'gpt3' || router.query['botType'] === 'chatgpt' || router.query['botType'] === 'gpt4' ? 1 : router.query['botType'] === 'clause-v1' || router.query['botType'] === 'clause-instant-v1' ? -1 : 0.75,
+        router.query['botType'] === 'gpt3' || router.query['botType'] === 'chatgpt' || router.query['botType'] === 'gpt4' ? 1 : router.query['botType'] === 'claude-v1' || router.query['botType'] === 'claude-instant-v1' ? -1 : 0.75,
     );
     const [top_kValue, setTop_kValue] = React.useState<number | string | Array<number | string>>(
-        router.query['botType'] === 'clause-v1' || router.query['botType'] === 'clause-instant-v1' ? -1 : 0,
+        router.query['botType'] === 'claude-v1' || router.query['botType'] === 'claude-instant-v1' ? -1 : 0,
     );
     const [n, setNValue] = React.useState<number | string | Array<number | string>>(
         1,
@@ -112,6 +113,7 @@ const texts = () => {
     };
 
     const handleSendMessage = async () => {
+        setLastMessage("");
         if (!mode) {
             snackbar('Error', 'error')
             router.push(`/dashboard/texts`);
@@ -139,7 +141,7 @@ const texts = () => {
             let chatBot = '';
             mode === "gpt3" || mode === "chatgpt" || mode === 'gpt4' ?
                 chatBot = 'Open AI' :
-                mode === "clause-v1" || mode === "clause-instant-v1" ?
+                mode === "claude-v1" || mode === "claude-instant-v1" ?
                     chatBot = 'Anthropic' :
                     chatBot = 'Cohere'
             switch (chatBot) {
@@ -159,24 +161,35 @@ const texts = () => {
                     console.log('Case not working');
                     break;
             }
-            
+
             setBackDropOpen(true);
 
-            const res = await fetch(url, reqOptions);
-            const body = await res.text();
-            console.log(body);
+            const response = await fetch(url, reqOptions);
 
-            setMessages(body);
+            if (!response.body) throw new Error("No response body");
+            const reader = response.body.getReader();
             
             setBackDropOpen(false);
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                const text = new TextDecoder("utf-8").decode(value);
+                setLastMessage((prevText) => prevText + text);
+            }
+
+            // const body = await res.text();
+            // console.log(body);
+
+            // setMessages(body);            
         }
     };
 
     const handleRevert = () => {
         setTemperatureValue(0.7);
         setMax_tokensValue(1000);
-        setTop_pValue(router.query['botType'] === 'gpt3' || router.query['botType'] === 'chatgpt' || router.query['botType'] === 'gpt4' ? 1 : router.query['botType'] === 'clause-v1' || router.query['botType'] === 'clause-instant-v1' ? -1 : 0.75);
-        setTop_kValue(router.query['botType'] === 'clause-v1' || router.query['botType'] === 'clause-instant-v1' ? -1 : 0)
+        setTop_pValue(router.query['botType'] === 'gpt3' || router.query['botType'] === 'chatgpt' || router.query['botType'] === 'gpt4' ? 1 : router.query['botType'] === 'claude-v1' || router.query['botType'] === 'claude-instant-v1' ? -1 : 0.75);
+        setTop_kValue(router.query['botType'] === 'claude-v1' || router.query['botType'] === 'claude-instant-v1' ? -1 : 0)
         setNValue(1);
         setPresence_penaltyValue(0);
         setFrequency_penaltyValue(0);
@@ -270,7 +283,7 @@ const texts = () => {
                                     {
                                         mode === "gpt3" || mode === "chatgpt" || mode === 'gpt4' ?
                                             `OpenAI's ${mode}` :
-                                            mode === "clause-v1" || mode === "clause-instant-v1" ?
+                                            mode === "claude-v1" || mode === "claude-instant-v1" ?
                                                 `Anthropic's ${mode}` :
                                                 `Cohere's ${mode}`
                                     }
@@ -313,10 +326,10 @@ const texts = () => {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             {
-                                                messages ?
+                                                lastMessage ?
                                                     (
                                                         <Typography sx={{ p: 2 }}>
-                                                            {messages}
+                                                            {lastMessage}
                                                         </Typography>
                                                     ) :
                                                     (
@@ -409,7 +422,7 @@ const texts = () => {
                                                                 best_of={best_of}
                                                                 setBest_ofValue={setBest_ofValue}
                                                             />
-                                                        ) : mode === "clause-v1" || mode === "clause-instant-v1" ?
+                                                        ) : mode === "claude-v1" || mode === "claude-instant-v1" ?
                                                             (
                                                                 <AnthropicSetting
                                                                     temperatureValue={temperatureValue}

@@ -719,8 +719,8 @@ const PrivacyPolicy = () => {
                           FAR 12.212 (for computer software) and FAR 12.211 (for technical data). If our services are acquired by or on
                           behalf of any agency within the Department of Defense, our services are subject to the terms of these&nbsp;Terms
                           of Service&nbsp;in accordance with Defense Federal Acquisition Regulation (&ldquo;DFARS&rdquo;) 227.7202-3. In
-                          addition, DFARS 252.227-7015 applies to technical data acquired by the DOD. This U.S. Government Rights clause is
-                          in lieu of, and supersedes, any other FAR, DFARS, or other clause or provision that addresses government rights in
+                          addition, DFARS 252.227-7015 applies to technical data acquired by the DOD. This U.S. Government Rights claude is
+                          in lieu of, and supersedes, any other FAR, DFARS, or other claude or provision that addresses government rights in
                           computer software or technical data under these&nbsp;Terms of Service.
                         </div>
                         <div>
@@ -915,7 +915,7 @@ const PrivacyPolicy = () => {
                       Any dispute arising out of or in connection with this contract, including any question regarding its existence,
                       validity, or termination, shall be referred to and finally resolved by the International Commercial Arbitration Court
                       under the European Arbitration Chamber (Belgium, Brussels, Avenue Louise, 146) &nbsp;according to the Rules of this
-                      ICAC, which, as a result of referring to it, is considered as the part of this clause. The number of arbitrators shall
+                      ICAC, which, as a result of referring to it, is considered as the part of this claude. The number of arbitrators shall
                       be&nbsp;one (1). The seat, or legal place, of arbitration shall be&nbsp;Jaipur,&nbsp;India. The language to be used in
                       the arbitral proceedings shall be&nbsp;English. The governing law of the contract shall be the substantive law
                       of&nbsp;India.

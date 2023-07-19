@@ -2,15 +2,16 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconClipboardList, IconChartInfographic, IconCursorText } from '@tabler/icons';
-import { PhotoSizeSelectActual, KeyboardVoice } from '@mui/icons-material';
+import { IconClipboardList, IconChartInfographic } from '@tabler/icons';
+import { Image, TextSnippet, KeyboardVoice, Psychology } from '@mui/icons-material';
 // constant
 const icons = {
   IconClipboardList,
   IconChartInfographic,
-  IconCursorText,
-  PhotoSizeSelectActual,
-  KeyboardVoice
+  TextSnippet,
+  Image,
+  KeyboardVoice,
+  Psychology
 };
 
 // ==============================|| WIDGET MENU ITEMS ||============================== //
@@ -21,18 +22,25 @@ const GenerativeAI = {
   type: 'group',
   children: [
     {
+      id: 'infrabuilder',
+      title: <FormattedMessage id="infrabuilder" />,
+      type: 'item',
+      url: '/dashboard/infrabuilder',
+      icon: icons.Psychology
+    },
+    {
       id: 'image',
       title: <FormattedMessage id="image" />,
       type: 'item',
       url: '/dashboard/images',
-      icon: icons.PhotoSizeSelectActual
+      icon: icons.Image
     },
     {
       id: 'text',
       title: <FormattedMessage id="Text" />,
       type: 'item',
       url: '/dashboard/texts',
-      icon: icons.IconCursorText
+      icon: icons.TextSnippet
     },
     {
       id: 'voice',

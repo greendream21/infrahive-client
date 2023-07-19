@@ -4,7 +4,7 @@ const promptCode = async (prompt: String, model: String, temperature: String, ma
     let data;
     if (model === "gpt3" || model === "chatgpt" || model === 'gpt4') {
         data = await Axios.post('/api/text/code', { prompt, model, temperature, max_tokens, top_p, n, presence_penalty, frequency_penalty, best_of, codeType });
-    } else if (model === "clause-v1" || model === "clause-instant-v1") {
+    } else if (model === "claude-v1" || model === "claude-instant-v1") {
         data = await Axios.post('/api/text/code', { prompt, model, max_tokens, temperature, top_k, top_p, codeType });
     } else {
         data = await Axios.post('/api/text/code', { prompt, model, max_tokens, n, top_k, top_p, frequency_penalty, presence_penalty, temperature, codeType });

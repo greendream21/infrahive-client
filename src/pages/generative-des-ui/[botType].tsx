@@ -78,7 +78,7 @@ const UI = () => {
                             {
                                 mode === "gpt3" || mode === "chatgpt" || mode === 'gpt4' ?
                                 `OpenAI's ${mode}` :
-                                mode === "clause-v1" || mode === "clause-instant-v1" ?
+                                mode === "claude-v1" || mode === "claude-instant-v1" ?
                                 `Anthropic's ${mode}` :
                                 `Cohere's ${mode}`
                             }

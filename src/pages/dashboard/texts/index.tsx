@@ -30,12 +30,12 @@ import {
         router.push(`/generative-des-ui/gpt4`);
     }
     
-    const goClausev = async () => {
-        router.push(`/generative-des-ui/clause-v1`);
+    const goClaudev = async () => {
+        router.push(`/generative-des-ui/claude-v1`);
     }
     
-    const goClauseInstantv = async () => {
-        router.push(`/generative-des-ui/clause-instant-v1`);
+    const goClaudeInstantv = async () => {
+        router.push(`/generative-des-ui/claude-instant-v1`);
     }
     
     const goCommand = async () => {
@@ -172,7 +172,7 @@ import {
                                         <Chip label="Language" variant="outlined" />
                                     </Stack>
                                     <Typography variant="h2" component="div" sx={{ my: 2}}>
-                                        Clause-v1
+                                        Claude-v1
                                     </Typography>
                                     <hr />
                                     <Typography variant="body2" sx={{ my: 2}}>
@@ -184,7 +184,7 @@ import {
                                 </CardContent>
                                 <hr />
                                 <CardActions sx={{ pt: 0, pb: '3px', px: '16px'}}>
-                                    <Button onClick={goClausev}>View Details</Button>
+                                    <Button onClick={goClaudev}>View Details</Button>
                                 </CardActions>
                             </Card>
                             <Card sx={{ width: 248 }} variant="outlined">
@@ -194,7 +194,7 @@ import {
                                         <Chip label="Language" variant="outlined" />
                                     </Stack>
                                     <Typography variant="h2" component="div" sx={{ my: 2}}>
-                                        Clause-instant-v1
+                                        Claude-instant-v1
                                     </Typography>
                                     <hr />
                                     <Typography variant="body2" sx={{ my: 2}}>
@@ -206,7 +206,7 @@ import {
                                 </CardContent>
                                 <hr />
                                 <CardActions sx={{ pt: 0, pb: '3px', px: '16px'}}>
-                                    <Button onClick={goClauseInstantv}>View Details</Button>
+                                    <Button onClick={goClaudeInstantv}>View Details</Button>
                                 </CardActions>
                             </Card>
                         </Stack>
